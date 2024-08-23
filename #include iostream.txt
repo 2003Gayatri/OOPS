@@ -1,0 +1,836 @@
+#include <iostream>
+#include <string>
+#include<stdexcept>
+
+const int MAX_STUDENTS = 100;
+const int MAX_FACULTY = 10;
+const int MAX_STAFF = 10;
+const int MAX_COURSE_OFFERINGS = 50;
+const int MAX_REGISTRATIONS = 200;
+const int MAX_GRADES = 200;
+const int MAX_EVENTS = 100;
+
+class Person {
+protected:
+    int id;
+    std::string name;
+    std::string department;
+
+public:
+    Person(int personId, const std::string& personName, const std::string& personDepartment)
+        : id(personId), name(personName), department(personDepartment) {}
+
+    virtual void displayData() const = 0;
+};
+
+class Student : public Person {
+private:
+    std::string courses[MAX_COURSE_OFFERINGS];
+    int numCourses;
+
+public:
+    Student(int studentId, const std::string& studentName, const std::string& studentDepartment)
+        : Person(studentId, studentName, studentDepartment), numCourses(0) {}
+
+    void addCourse(const std::string& course) {
+        if (numCourses < MAX_COURSE_OFFERINGS) {
+            courses[numCourses] = course;
+            numCourses++;
+        }
+        else {
+            std::cout << "Error: Maximum course offerings reached for the student." << std::endl;
+        }
+    }
+
+    void displayData() const override {
+        std::cout << "Student ID: " << id << std::endl;
+        std::cout << "Name: " << name << std::endl;
+        std::cout << "Department: " << department << std::endl;
+        std::cout << "Courses Enrolled:" << std::endl;
+        for (int i = 0; i < numCourses; i++) {
+            std::cout << "- " << courses[i] << std::endl;
+        }
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+class Faculty : public Person {
+private:
+    std::string courses[MAX_COURSE_OFFERINGS];
+    int numCourses;
+
+public:
+    Faculty(int facultyId, const std::string& facultyName, const std::string& facultyDepartment)
+        : Person(facultyId, facultyName, facultyDepartment), numCourses(0) {}
+
+    void addCourse(const std::string& course) {
+        if (numCourses < MAX_COURSE_OFFERINGS) {
+            courses[numCourses] = course;
+            numCourses++;
+        }
+        else {
+            std::cout << "Error: Maximum courses taught reached for the faculty." << std::endl;
+        }
+    }
+
+    void displayData() const override {
+        std::cout << "Faculty ID: " << id << std::endl;
+        std::cout << "Name: " << name << std::endl;
+        std::cout << "Department: " << department << std::endl;
+        std::cout << "Courses Teaching:" << std::endl;
+        for (int i = 0; i < numCourses; i++) {
+            std::cout << "- " << courses[i] << std::endl;
+        }
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+class Staff : public Person {
+public:
+    Staff(int staffId, const std::string& staffName, const std::string& staffDepartment)
+        : Person(staffId, staffName, staffDepartment) {}
+
+    void displayData() const override {
+        std::cout << "Staff ID: " << id << std::endl;
+        std::cout << "Name: " << name << std::endl;
+        std::cout << "Department: " << department << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+class CourseOffering {
+private:
+    std::string course;
+    std::string faculty;
+    std::string semester;
+
+public:
+    CourseOffering() : course(""), faculty(""), semester("") {}
+
+    CourseOffering(const std::string& courseCode, const std::string& facultyName, const std::string& semesterName)
+        : course(courseCode), faculty(facultyName), semester(semesterName) {}
+
+    void setData(const std::string& courseCode, const std::string& facultyName, const std::string& semesterName) {
+        course = courseCode;
+        faculty = facultyName;
+        semester = semesterName;
+    }
+
+    void displayData() const {
+        std::cout << "Course: " << course << std::endl;
+        std::cout << "Faculty: " << faculty << std::endl;
+        std::cout << "Semester: " << semester << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+class Registration {
+private:
+    std::string student;
+    std::string courseOffering;
+
+public:
+    Registration() : student(""), courseOffering("") {}
+
+    Registration(const std::string& studentName, const std::string& courseCode)
+        : student(studentName), courseOffering(courseCode) {}
+
+    void setData(const std::string& studentName, const std::string& courseCode) {
+        student = studentName;
+        courseOffering = courseCode;
+    }
+
+    void displayData() const {
+        std::cout << "Student: " << student << std::endl;
+        std::cout << "Course Offering: " << courseOffering << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+class Grade {
+private:
+    std::string student;
+    std::string courseOffering;
+    float grade;
+
+public:
+    Grade() : student(""), courseOffering(""), grade(0.0) {}
+
+    Grade(const std::string& studentName, const std::string& courseCode, float studentGrade)
+        : student(studentName), courseOffering(courseCode), grade(studentGrade) {}
+
+    void setData(const std::string& studentName, const std::string& courseCode, float studentGrade) {
+        student = studentName;
+        courseOffering = courseCode;
+        grade = studentGrade;
+    }
+
+    void displayData() const {
+        std::cout << "Student: " << student << std::endl;
+        std::cout << "Course Offering: " << courseOffering << std::endl;
+        std::cout << "Grade: " << grade << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+class Event {
+private:
+    std::string name;
+    std::string date;
+    std::string location;
+
+public:
+    Event() : name(""), date(""), location("") {}
+
+    Event(const std::string& eventName, const std::string& eventDate, const std::string& eventLocation)
+        : name(eventName), date(eventDate), location(eventLocation) {}
+
+    void setData(const std::string& eventName, const std::string& eventDate, const std::string& eventLocation) {
+        name = eventName;
+        date = eventDate;
+        location = eventLocation;
+    }
+
+    void displayData() const {
+        std::cout << "Event Name: " << name << std::endl;
+        std::cout << "Event Date: " << date << std::endl;
+        std::cout << "Event Location: " << location << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+// Factory Design Pattern
+class PersonFactory {
+public:
+    static Person* createPerson(const std::string& type, int id, const std::string& name, const std::string& department) {
+        if (type == "Student") {
+            return new Student(id, name, department);
+        }
+        else if (type == "Faculty") {
+            return new Faculty(id, name, department);
+        }
+        else if (type == "Staff") {
+            return new Staff(id, name, department);
+        }
+        else {
+            throw std::runtime_error("Invalid person type!");
+        }
+    }
+};
+
+class CourseManagementSystem {
+private:
+    Person* people[MAX_STUDENTS + MAX_FACULTY + MAX_STAFF];
+    int numPeople;
+
+    CourseOffering courseOfferings[MAX_COURSE_OFFERINGS];
+    int numCourseOfferings;
+
+    Registration registrations[MAX_REGISTRATIONS];
+    int numRegistrations;
+
+    Grade grades[MAX_GRADES];
+    int numGrades;
+
+    Event events[MAX_EVENTS];
+    int numEvents;
+
+public:
+    CourseManagementSystem() : numPeople(0), numCourseOfferings(0), numRegistrations(0), numGrades(0), numEvents(0) {}
+
+    void addPerson(const std::string& type, int id, const std::string& name, const std::string& department) {
+        if (numPeople < MAX_STUDENTS + MAX_FACULTY + MAX_STAFF) {
+            people[numPeople] = PersonFactory::createPerson(type, id, name, department);
+            numPeople++;
+        }
+        else {
+            std::cout << "Error: Maximum number of people reached." << std::endl;
+        }
+    }
+
+    void addCourseOffering(const std::string& courseCode, const std::string& facultyName, const std::string& semesterName) {
+        if (numCourseOfferings < MAX_COURSE_OFFERINGS) {
+            courseOfferings[numCourseOfferings] = CourseOffering(courseCode, facultyName, semesterName);
+            numCourseOfferings++;
+        }
+        else {
+            std::cout << "Error: Maximum number of course offerings reached." << std::endl;
+        }
+    }
+
+    void registerStudentForCourse(const std::string& studentName, const std::string& courseCode) {
+        if (numRegistrations < MAX_REGISTRATIONS) {
+            registrations[numRegistrations] = Registration(studentName, courseCode);
+            numRegistrations++;
+        }
+        else {
+            std::cout << "Error: Maximum number of registrations reached." << std::endl;
+        }
+    }
+
+    void assignGradeToStudent(const std::string& studentName, const std::string& courseCode, float grade) {
+        if (numGrades < MAX_GRADES) {
+            grades[numGrades] = Grade(studentName, courseCode, grade);
+            numGrades++;
+        }
+        else {
+            std::cout << "Error: Maximum number of grades reached." << std::endl;
+        }
+    }
+
+    void addEvent(const std::string& eventName, const std::string& eventDate, const std::string& eventLocation) {
+        if (numEvents < MAX_EVENTS) {
+            events[numEvents] = Event(eventName, eventDate, eventLocation);
+            numEvents++;
+        }
+        else {
+            std::cout << "Error: Maximum number of events reached." << std::endl;
+        }
+    }
+
+    void displayPeople() const {
+        std::cout << "People Records:" << std::endl;
+        for (int i = 0; i < numPeople; i++) {
+            people[i]->displayData();
+        }
+    }
+
+    void displayCourseOfferings() const {
+        std::cout << "Course Offering Records:" << std::endl;
+        for (int i = 0; i < numCourseOfferings; i++) {
+            courseOfferings[i].displayData();
+        }
+    }
+
+    void displayRegistrations() const {
+        std::cout << "Registration Records:" << std::endl;
+        for (int i = 0; i < numRegistrations; i++) {
+            registrations[i].displayData();
+        }
+    }
+
+    void displayGrades() const {
+        std::cout << "Grade Records:" << std::endl;
+        for (int i = 0; i < numGrades; i++) {
+            grades[i].displayData();
+        }
+    }
+
+    void displayEvents() const {
+        std::cout << "Event Records:" << std::endl;
+        for (int i = 0; i < numEvents; i++) {
+            events[i].displayData();
+        }
+    }
+
+    ~CourseManagementSystem() {
+        for (int i = 0; i < numPeople; i++) {
+            delete people[i];
+        }
+    }
+};
+
+int main() {
+    CourseManagementSystem cms;
+
+    int choice;
+    do {
+        std::cout << "Menu:" << std::endl;
+        std::cout << "1. Add Person" << std::endl;
+        std::cout << "2. Add Course Offering" << std::endl;
+        std::cout << "3. Register Student for Course" << std::endl;
+        std::cout << "4. Assign Grade to Student" << std::endl;
+        std::cout << "5. Add Event" << std::endl;
+        std::cout << "6. Display People Records" << std::endl;
+        std::cout << "7. Display Course Offering Records" << std::endl;
+        std::cout << "8. Display Registration Records" << std::endl;
+        std::cout << "9. Display Grade Records" << std::endl;
+        std::cout << "10. Display Event Records" << std::endl;
+        std::cout << "0. Exit" << std::endl;
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+        case 1: {
+            // Adding people
+            std::string type, name, department;
+            int id;
+            std::cout << "Enter type (Student, Faculty, Staff): ";
+            std::cin >> type;
+            std::cout << "Enter ID: ";
+            std::cin >> id;
+            std::cout << "Enter name: ";
+            std::cin.ignore(); // Ignore newline left in the input buffer
+            std::getline(std::cin, name);
+            std::cout << "Enter department: ";
+            std::getline(std::cin, department);
+            cms.addPerson(type, id, name, department);
+            break;
+        }
+        case 2: {
+            // Adding course offerings
+            std::string courseCode, facultyName, semesterName;
+            std::cout << "Enter course code: ";
+            std::cin >> courseCode;
+            std::cout << "Enter faculty name: ";
+            std::cin.ignore();
+            std::getline(std::cin, facultyName);
+            std::cout << "Enter semester name: ";
+            std::getline(std::cin, semesterName);
+            cms.addCourseOffering(courseCode, facultyName, semesterName);
+            break;
+        }
+        case 3: {
+            // Registering students for courses
+            std::string studentName, courseCode;
+            std::cout << "Enter student name: ";
+            std::cin.ignore();
+            std::getline(std::cin, studentName);
+            std::cout << "Enter course code: ";
+            std::cin >> courseCode;
+            cms.registerStudentForCourse(studentName, courseCode);
+            break;
+        }
+        case 4: {
+            // Assigning grades to students
+            std::string studentName, courseCode;
+            float grade;
+            std::cout << "Enter student name: ";
+            std::cin.ignore();
+            std::getline(std::cin, studentName);
+            std::cout << "Enter course code: ";
+            std::cin >> courseCode;
+            std::cout << "Enter grade: ";
+            std::cin >> grade;
+            cms.assignGradeToStudent(studentName, courseCode, grade);
+            break;
+        }
+        case 5: {
+            // Adding events
+            std::string eventName, eventDate, eventLocation;
+            std::cout << "Enter event name: ";
+            std::cin.ignore();
+            std::getline(std::cin, eventName);
+            std::cout << "Enter event date: ";
+            std::getline(std::cin, eventDate);
+            std::cout << "Enter event location: ";
+            std::getline(std::cin, eventLocation);
+            cms.addEvent(eventName, eventDate, eventLocation);
+            break;
+        }
+        case 6:
+            // Display People Records
+            cms.displayPeople();
+            break;
+        case 7:
+            // Display Course Offering Records
+            cms.displayCourseOfferings();
+            break;
+        case 8:
+            // Display Registration Records
+            cms.displayRegistrations();
+            break;
+        case 9:
+            // Display Grade Records
+            cms.displayGrades();
+            break;
+        case 10:
+            // Display Event Records
+            cms.displayEvents();
+            break;
+        case 0:
+            std::cout << "Exiting..." << std::endl;
+            break;
+        default:
+            std::cout << "Invalid choice. Please try again." << std::endl;
+        }
+        std::cout << std::endl;
+    } while (choice != 0);
+
+    return 0;
+}
+
+
+________________________________________________________________________________________
+
+
+
+#include <iostream>
+#include <string>
+
+const int MAX_STUDENTS = 100;
+const int MAX_FACULTY = 10;
+const int MAX_STAFF = 10;
+const int MAX_COURSE_OFFERINGS = 50;
+const int MAX_REGISTRATIONS = 200;
+const int MAX_GRADES = 200;
+const int MAX_EVENTS = 100;
+
+class Person {
+protected:
+    int id;
+    std::string name;
+    std::string department;
+
+public:
+    Person(int personId, const std::string& personName, const std::string& personDepartment)
+        : id(personId), name(personName), department(personDepartment) {}
+
+    virtual void displayData() const = 0;
+};
+
+class Student : public Person {
+private:
+    std::string courses[MAX_COURSE_OFFERINGS];
+    int numCourses;
+
+public:
+    Student(int studentId, const std::string& studentName, const std::string& studentDepartment)
+        : Person(studentId, studentName, studentDepartment), numCourses(0) {}
+
+    void addCourse(const std::string& course) {
+        if (numCourses < MAX_COURSE_OFFERINGS) {
+            courses[numCourses] = course;
+            numCourses++;
+        }
+        else {
+            std::cout << "Error: Maximum course offerings reached for the student." << std::endl;
+        }
+    }
+
+    void displayData() const override {
+        std::cout << "Student ID: " << id << std::endl;
+        std::cout << "Name: " << name << std::endl;
+        std::cout << "Department: " << department << std::endl;
+        std::cout << "Courses Enrolled:" << std::endl;
+        for (int i = 0; i < numCourses; i++) {
+            std::cout << "- " << courses[i] << std::endl;
+        }
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+class Faculty : public Person {
+private:
+    std::string courses[MAX_COURSE_OFFERINGS];
+    int numCourses;
+
+public:
+    Faculty(int facultyId, const std::string& facultyName, const std::string& facultyDepartment)
+        : Person(facultyId, facultyName, facultyDepartment), numCourses(0) {}
+
+    void addCourse(const std::string& course) {
+        if (numCourses < MAX_COURSE_OFFERINGS) {
+            courses[numCourses] = course;
+            numCourses++;
+        }
+        else {
+            std::cout << "Error: Maximum courses taught reached for the faculty." << std::endl;
+        }
+    }
+
+    void displayData() const override {
+        std::cout << "Faculty ID: " << id << std::endl;
+        std::cout << "Name: " << name << std::endl;
+        std::cout << "Department: " << department << std::endl;
+        std::cout << "Courses Teaching:" << std::endl;
+        for (int i = 0; i < numCourses; i++) {
+            std::cout << "- " << courses[i] << std::endl;
+        }
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+class Staff : public Person {
+public:
+    Staff(int staffId, const std::string& staffName, const std::string& staffDepartment)
+        : Person(staffId, staffName, staffDepartment) {}
+
+    void displayData() const override {
+        std::cout << "Staff ID: " << id << std::endl;
+        std::cout << "Name: " << name << std::endl;
+        std::cout << "Department: " << department << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+class CourseOffering {
+private:
+    std::string course;
+    std::string faculty;
+    std::string semester;
+
+public:
+    CourseOffering() : course(""), faculty(""), semester("") {}
+
+    CourseOffering(const std::string& courseCode, const std::string& facultyName, const std::string& semesterName)
+        : course(courseCode), faculty(facultyName), semester(semesterName) {}
+
+    void setData(const std::string& courseCode, const std::string& facultyName, const std::string& semesterName) {
+        course = courseCode;
+        faculty = facultyName;
+        semester = semesterName;
+    }
+
+    void displayData() const {
+        std::cout << "Course: " << course << std::endl;
+        std::cout << "Faculty: " << faculty << std::endl;
+        std::cout << "Semester: " << semester << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+class Registration {
+private:
+    std::string student;
+    std::string courseOffering;
+
+public:
+    Registration() : student(""), courseOffering("") {}
+
+    Registration(const std::string& studentName, const std::string& courseCode)
+        : student(studentName), courseOffering(courseCode) {}
+
+    void setData(const std::string& studentName, const std::string& courseCode) {
+        student = studentName;
+        courseOffering = courseCode;
+    }
+
+    void displayData() const {
+        std::cout << "Student: " << student << std::endl;
+        std::cout << "Course Offering: " << courseOffering << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+class Grade {
+private:
+    std::string student;
+    std::string courseOffering;
+    float grade;
+
+public:
+    Grade() : student(""), courseOffering(""), grade(0.0) {}
+
+    Grade(const std::string& studentName, const std::string& courseCode, float studentGrade)
+        : student(studentName), courseOffering(courseCode), grade(studentGrade) {}
+
+    void setData(const std::string& studentName, const std::string& courseCode, float studentGrade) {
+        student = studentName;
+        courseOffering = courseCode;
+        grade = studentGrade;
+    }
+
+    void displayData() const {
+        std::cout << "Student: " << student << std::endl;
+        std::cout << "Course Offering: " << courseOffering << std::endl;
+        std::cout << "Grade: " << grade << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+class Event {
+private:
+    std::string name;
+    std::string date;
+    std::string location;
+
+public:
+    Event() : name(""), date(""), location("") {}
+
+    Event(const std::string& eventName, const std::string& eventDate, const std::string& eventLocation)
+        : name(eventName), date(eventDate), location(eventLocation) {}
+
+    void setData(const std::string& eventName, const std::string& eventDate, const std::string& eventLocation) {
+        name = eventName;
+        date = eventDate;
+        location = eventLocation;
+    }
+
+    void displayData() const {
+        std::cout << "Event Name: " << name << std::endl;
+        std::cout << "Event Date: " << date << std::endl;
+        std::cout << "Event Location: " << location << std::endl;
+        std::cout << "-------------------------" << std::endl;
+    }
+};
+
+
+// Factory Design Pattern
+class PersonFactory {
+public:
+    static Person* createPerson(const std::string& type, int id, const std::string& name, const std::string& department) {
+        if (type == "Student") {
+            return new Student(id, name, department);
+        }
+        else if (type == "Faculty") {
+            return new Faculty(id, name, department);
+        }
+        else if (type == "Staff") {
+            return new Staff(id, name, department);
+        }
+        else {
+            throw std::runtime_error("Invalid person type!");
+        }
+    }
+};
+
+class CourseManagementSystem {
+private:
+    Person* people[MAX_STUDENTS + MAX_FACULTY + MAX_STAFF];
+    int numPeople;
+
+    CourseOffering courseOfferings[MAX_COURSE_OFFERINGS];
+    int numCourseOfferings;
+
+    Registration registrations[MAX_REGISTRATIONS];
+    int numRegistrations;
+
+    Grade grades[MAX_GRADES];
+    int numGrades;
+
+    Event events[MAX_EVENTS];
+    int numEvents;
+
+public:
+    CourseManagementSystem() : numPeople(0), numCourseOfferings(0), numRegistrations(0), numGrades(0), numEvents(0) {}
+
+    void addPerson(const std::string& type, int id, const std::string& name, const std::string& department) {
+        if (numPeople < MAX_STUDENTS + MAX_FACULTY + MAX_STAFF) {
+            people[numPeople] = PersonFactory::createPerson(type, id, name, department);
+            numPeople++;
+        }
+        else {
+            std::cout << "Error: Maximum number of people reached." << std::endl;
+        }
+    }
+
+    void addCourseOffering(const std::string& courseCode, const std::string& facultyName, const std::string& semesterName) {
+        if (numCourseOfferings < MAX_COURSE_OFFERINGS) {
+            courseOfferings[numCourseOfferings] = CourseOffering(courseCode, facultyName, semesterName);
+            numCourseOfferings++;
+        }
+        else {
+            std::cout << "Error: Maximum number of course offerings reached." << std::endl;
+        }
+    }
+
+    void registerStudentForCourse(const std::string& studentName, const std::string& courseCode) {
+        if (numRegistrations < MAX_REGISTRATIONS) {
+            registrations[numRegistrations] = Registration(studentName, courseCode);
+            numRegistrations++;
+        }
+        else {
+            std::cout << "Error: Maximum number of registrations reached." << std::endl;
+        }
+    }
+
+    void assignGradeToStudent(const std::string& studentName, const std::string& courseCode, float grade) {
+        if (numGrades < MAX_GRADES) {
+            grades[numGrades] = Grade(studentName, courseCode, grade);
+            numGrades++;
+        }
+        else {
+            std::cout << "Error: Maximum number of grades reached." << std::endl;
+        }
+    }
+
+    void addEvent(const std::string& eventName, const std::string& eventDate, const std::string& eventLocation) {
+        if (numEvents < MAX_EVENTS) {
+            events[numEvents] = Event(eventName, eventDate, eventLocation);
+            numEvents++;
+        }
+        else {
+            std::cout << "Error: Maximum number of events reached." << std::endl;
+        }
+    }
+
+    void displayPeople() const {
+        std::cout << "People Records:" << std::endl;
+        for (int i = 0; i < numPeople; i++) {
+            people[i]->displayData();
+        }
+    }
+
+    void displayCourseOfferings() const {
+        std::cout << "Course Offering Records:" << std::endl;
+        for (int i = 0; i < numCourseOfferings; i++) {
+            courseOfferings[i].displayData();
+        }
+    }
+
+    void displayRegistrations() const {
+        std::cout << "Registration Records:" << std::endl;
+        for (int i = 0; i < numRegistrations; i++) {
+            registrations[i].displayData();
+        }
+    }
+
+    void displayGrades() const {
+        std::cout << "Grade Records:" << std::endl;
+        for (int i = 0; i < numGrades; i++) {
+            grades[i].displayData();
+        }
+    }
+
+    void displayEvents() const {
+        std::cout << "Event Records:" << std::endl;
+        for (int i = 0; i < numEvents; i++) {
+            events[i].displayData();
+        }
+    }
+
+    ~CourseManagementSystem() {
+        for (int i = 0; i < numPeople; i++) {
+            delete people[i];
+        }
+    }
+};
+
+int main() {
+    try {
+        CourseManagementSystem cms;
+
+        // Adding people
+        cms.addPerson("Student", 101, "John Smith", "Computer Science");
+        cms.addPerson("Student", 102, "Alice Johnson", "Electrical Engineering");
+        cms.addPerson("Faculty", 1001, "Dr. James Brown", "Computer Science");
+        cms.addPerson("Faculty", 1002, "Dr. Sarah White", "Electrical Engineering");
+        cms.addPerson("Staff", 2001, "Emily Davis", "Administration");
+
+        // Adding course offerings
+        cms.addCourseOffering("CS101", "Dr. James Brown", "Fall 2023");
+        cms.addCourseOffering("EE101", "Dr. Sarah White", "Fall 2023");
+
+        // Registering students for courses
+        cms.registerStudentForCourse("John Smith", "CS101");
+        cms.registerStudentForCourse("Alice Johnson", "EE101");
+
+        // Assigning grades to students
+        cms.assignGradeToStudent("John Smith", "CS101", 4.0);
+        cms.assignGradeToStudent("Alice Johnson", "EE101", 3.7);
+
+        // Adding events
+        cms.addEvent("University Fair", "2023-09-15", "Central Campus");
+        cms.addEvent("Graduation Ceremony", "2023-12-20", "Stadium");
+
+        // Display all records
+        cms.displayPeople();
+        cms.displayCourseOfferings();
+        cms.displayRegistrations();
+        cms.displayGrades();
+        cms.displayEvents();
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "Error: " << ex.what() << std::endl;
+    }
+
+    return 0;
+}
